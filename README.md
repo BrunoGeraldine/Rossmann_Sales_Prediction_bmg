@@ -171,9 +171,9 @@ Após encontrar os melhores parâmetros para o modelo através do metódo Random
 
 | Scenario | Values  |                              
 |-----------|---------|
-| Predictions	| €286,066,344.23 |
-| Worst Scenario | €285,305,077.05 |
-| Best Scenario	| €286,827,611.42 | 
+| Predictions	| €286,381,809.29 |
+| Worst Scenario | €285,609,778.34 |
+| Best Scenario	| €287,153,840.24 | 
 
 #  Next steps
 
