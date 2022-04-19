@@ -10,6 +10,7 @@ import pandas as pd
 class Rossmann(object):
     def __init__(self):
         self.home_path = '/home/bruno/repos/Rossmann_Sales_Prediction_bmg/' 
+        
         self.competition_distance_scaler   = pickle.load(open(self.home_path + 'parameter/competition_distance_scaler.pkl', 'rb'))
         self.competition_time_month_scaler = pickle.load(open(self.home_path + 'parameter/competition_time_month_scaler.pkl', 'rb'))
         self.promo_time_week_scaler        = pickle.load(open(self.home_path + 'parameter/promo_time_week_scaler.pkl', 'rb'))
@@ -122,6 +123,7 @@ class Rossmann(object):
 
         # Filtering columns
         cols_drop = ['open',  'promo_interval', 'month_map']
+        #provavelmente não temos mais a coluna costumers aqui
         df2 = df2.drop(cols_drop,axis=1)
         
         return df2
@@ -131,18 +133,17 @@ class Rossmann(object):
         # Rescaling
         
         #competition_distance
-        df5['competition_distance'] = self.competition_distance_scaler.fit_transform( df5[['competition_distance']].values )
+        df5['competition_distance'] = self.competition_distance_scaler.transform( df5[['competition_distance']].values )
 
         #competition_time_month
-        df5['competition_time_month'] = self.competition_time_month_scaler.fit_transform( df5[['competition_time_month']].values )
+        df5['competition_time_month'] = self.competition_time_month_scaler.transform( df5[['competition_time_month']].values )
 
         # promo_time_week 
-        df5['promo_time_week'] = self.promo_time_week_scaler.fit_transform( df5[['promo_time_week']].values )
+        df5['promo_time_week'] = self.promo_time_week_scaler.transform( df5[['promo_time_week']].values )
         
         # year
-        df5['year'] = self.year_scaler.fit_transform( df5[['year']].values )
+        df5['year'] = self.year_scaler.transform( df5[['year']].values )
     
-
         # Transformation
         #Enconding
         
@@ -150,7 +151,7 @@ class Rossmann(object):
         df5 = pd.get_dummies( df5, prefix=['state_holiday'], columns=['state_holiday'] )
 
         #store_type - Label enconding
-        df5['store_type'] = self.store_type_scaler.fit_transform( df5['store_type'] )
+        df5['store_type'] = self.store_type_scaler.transform( df5['store_type'] )
          
         #assortment
         assortment_dict = {'basic': 1, 'extra': 2, 'extended': 3} 
@@ -175,9 +176,9 @@ class Rossmann(object):
         df5['week_of_year_cos'] = df5['week_of_year'].apply(lambda x: np.cos(x * ( 2. * np.pi/52 )))
         
         cols_selected = ['store', 'promo', 'store_type', 'assortment', 'competition_distance', 'competition_open_since_month',
-                         'competition_open_since_year', 'promo2', 'promo2_since_week', 'promo2_since_year', 'competition_time_month',
-                         'promo_time_week', 'day_of_week_sin', 'day_of_week_cos', 'month_sin', 'month_cos', 'day_sin', 'day_cos', 
-                         'week_of_year_sin', 'week_of_year_cos']
+                         'competition_open_since_year', 'promo2', 'promo2_since_week', 'promo2_since_year',
+                         'competition_time_month', 'promo_time_week', 'day_of_week_sin', 'day_of_week_cos',
+                         'month_sin', 'month_cos', 'day_sin', 'day_cos', 'week_of_year_sin', 'week_of_year_cos']
         
         return df5[cols_selected]
 
